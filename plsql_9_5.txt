@@ -1,0 +1,52 @@
+CREATE TABLE salary_history_58(
+  empno NUMBER(4) PRIMARY KEY,
+  old_salary NUMBER(4),
+  new_salary NUMBER(4),
+  changed_date DATE);
+
+BEGIN
+    FOR rec IN (SELECT empno, sal, grade FROM emp_58)
+    LOOP
+        DECLARE
+            v_new_sal NUMBER;
+        BEGIN
+            CASE rec.grade
+                WHEN 'A' THEN v_new_sal := rec.sal * 1.15;
+                WHEN 'B' THEN v_new_sal := rec.sal * 1.12;
+                WHEN 'C' THEN v_new_sal := rec.sal * 1.10;
+                WHEN 'D' THEN v_new_sal := rec.sal * 1.10;
+                WHEN 'E' THEN v_new_sal := rec.sal * 1.05;
+            END CASE;
+                        
+            INSERT INTO salary_history_58 VALUES (rec.empno, rec.sal, v_new_sal, SYSDATE);
+
+	    UPDATE emp
+            SET sal = v_new_sal
+            WHERE empno = rec.empno;
+
+        END;
+    END LOOP;
+    COMMIT;
+END;
+/
+
+SELECT * FROM salary_history_58;
+
+     EMPNO OLD_SALARY NEW_SALARY CHANGED_D
+---------- ---------- ---------- ---------
+      7369        800        920 28-APR-25
+      7499       1600       1840 28-APR-25
+      7521       1250       1438 28-APR-25
+      7566       2975       3421 28-APR-25
+      7654       1250       1400 28-APR-25
+      7698       2850       3278 28-APR-25
+      7782       2450       2744 28-APR-25
+      7788       3000       3450 28-APR-25
+      7839       5000       5750 28-APR-25
+      7844       1500       1725 28-APR-25
+      7876       1100       1232 28-APR-25
+      7900        950       1093 28-APR-25
+      7902       3000       3450 28-APR-25
+      7934       1300       1456 28-APR-25
+
+14 rows selected.

@@ -1,0 +1,19 @@
+BEGIN
+  FOR rec IN (SELECT * FROM (
+                    SELECT * FROM emp_58 ORDER BY sal DESC
+                ) WHERE ROWNUM <= 7)
+    LOOP
+        DBMS_OUTPUT.PUT_LINE('Employee: ' || rec.ename || ', Salary: ' || rec.sal);
+    END LOOP;
+END;
+/
+
+Employee: King, Salary: 5000
+Employee: Scott, Salary: 3000
+Employee: Ford, Salary: 3000
+Employee: Jones, Salary: 2975
+Employee: Blake, Salary: 2850
+Employee: Clark, Salary: 2450
+Employee: Allen, Salary: 1600
+
+PL/SQL procedure successfully completed.

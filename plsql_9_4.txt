@@ -1,0 +1,35 @@
+CREATE TABLE bonus_58 (
+    empno NUMBER,
+    ename VARCHAR2(50),
+    job VARCHAR2(30),
+    sal NUMBER,
+    bonus_amount NUMBER
+);
+
+BEGIN
+    FOR rec IN (SELECT empno, ename, job, sal 
+                FROM emp_58
+                WHERE job = 'Salesman' AND sal <= 15000 AND deptno=30)
+    LOOP
+        INSERT INTO bonus_58 VALUES (rec.empno, rec.ename, rec.job, rec.sal, rec.sal * 0.2);
+        DBMS_OUTPUT.PUT_LINE('Inserted Bonus -> ' || rec.ename || ', Bonus: ' || rec.sal * 0.2);
+    END LOOP;
+    COMMIT;
+END;
+/
+
+Inserted Bonus -> Allen, Bonus: 320
+Inserted Bonus -> Ward, Bonus: 250
+Inserted Bonus -> Martin, Bonus: 250
+Inserted Bonus -> Turner, Bonus: 300
+
+PL/SQL procedure successfully completed.
+
+SQL> SELECT * FROM bonus_58;
+
+     EMPNO ENAME                                              JOB                       SAL BONUS_AMOUNT
+---------- -------------------------------------------------- ------------------------------ ---------- ------------
+      7499 Allen                                              Salesman                 1600   320
+      7521 Ward                                               Salesman                 1250   250
+      7654 Martin                                             Salesman                 1250   250
+      7844 Turner                                             Salesman                 1500   300
